@@ -116,67 +116,73 @@ export default function Home() {
     return (
         <main className="w-full h-full overflow-x-hidden text-white">
             {/* 第三屏 - 表单 */}
-            <section id="form" className="h-screen flex flex-col justify-center items-center bg-black px-6">
-                {/* 新增价格曲线图 */}
-                <PriceChart coin={coin} />
-                <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 w-full max-w-lg shadow-xl">
-                    <h2 className="text-3xl font-bold mb-6">选择预测条件</h2>
+            <section id="form" className="h-screen flex flex-col bg-black px-6">
+                {/* 上半：线图区域 */}
+                <div className="flex-1 flex items-center justify-center overflow-hidden">
+                    <PriceChart coin={coin} />
+                </div>
 
-                    {/* 币种 */}
-                    <label className="block mb-3 font-semibold">选择币种</label>
-                    <div className="flex gap-4 mb-6">
-                        {["ETH", "BTC"].map((c) => (
-                            <motion.button
-                                key={c}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={() => setCoin(c as CoinType)}
-                                className={`px-4 py-2 rounded-lg border ${
-                                    coin === c
-                                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white border-transparent"
-                                        : "border-gray-500 text-gray-300 hover:border-white"
-                                }`}
-                            >
-                                {c}
-                            </motion.button>
-                        ))}
+                {/* 下半：表单区域 */}
+                <div className="flex-1 flex items-center justify-center overflow-hidden">
+                    <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 w-full max-w-lg shadow-xl overflow-hidden">
+                        <h2 className="text-2xl font-bold mb-4">选择预测条件</h2>
+
+                        {/* 币种 */}
+                        <label className="block mb-2 font-semibold">选择币种</label>
+                        <div className="flex gap-4 mb-4">
+                            {["ETH", "BTC"].map((c) => (
+                                <motion.button
+                                    key={c}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => setCoin(c as CoinType)}
+                                    className={`px-3 py-2 rounded-lg border ${
+                                        coin === c
+                                            ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white border-transparent"
+                                            : "border-gray-500 text-gray-300 hover:border-white"
+                                    }`}
+                                >
+                                    {c}
+                                </motion.button>
+                            ))}
+                        </div>
+
+                        {/* 时间 */}
+                        <label className="block mb-2 font-semibold">预测截止时间</label>
+                        <input
+                            type="datetime-local"
+                            value={time}
+                            onChange={(e) => setTime(e.target.value)}
+                            className="w-full p-2 rounded-lg bg-black/30 border border-gray-500 mb-4 focus:border-pink-400 outline-none"
+                        />
+
+                        {/* Agents */}
+                        <label className="block mb-2 font-semibold">选择 Agents</label>
+                        <div className="flex flex-wrap gap-2 mb-4">
+                            {agentsList.map((agent) => (
+                                <button
+                                    key={agent.id}
+                                    type="button"
+                                    onClick={() => toggleAgentSelection(agent.id)}
+                                    className={`px-3 py-2 rounded-lg border cursor-pointer select-none ${
+                                        selectedAgents.includes(agent.id)
+                                            ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white border-transparent"
+                                            : "border-gray-500 text-gray-300 hover:border-white"
+                                    }`}
+                                >
+                                    {agent.avatar} {agent.name}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* 提交按钮 */}
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            onClick={startPrediction}
+                            className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 text-lg font-bold shadow-lg"
+                        >
+                            开始预测
+                        </motion.button>
                     </div>
-
-                    {/* 时间 */}
-                    <label className="block mb-3 font-semibold">预测截止时间</label>
-                    <input
-                        type="datetime-local"
-                        value={time}
-                        onChange={(e) => setTime(e.target.value)}
-                        className="w-full p-2 rounded-lg bg-black/30 border border-gray-500 mb-6 focus:border-pink-400 outline-none"
-                    />
-
-                    {/* 选择 Agents */}
-                    <label className="block mb-3 font-semibold">选择 Agents</label>
-                    <div className="flex flex-wrap gap-3 mb-6">
-                        {agentsList.map((agent) => (
-                            <button
-                                key={agent.id}
-                                type="button"
-                                onClick={() => toggleAgentSelection(agent.id)}
-                                className={`px-4 py-2 rounded-lg border cursor-pointer select-none ${
-                                    selectedAgents.includes(agent.id)
-                                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white border-transparent"
-                                        : "border-gray-500 text-gray-300 hover:border-white"
-                                }`}
-                            >
-                                {agent.avatar} {agent.name}
-                            </button>
-                        ))}
-                    </div>
-
-                    {/* 提交按钮 */}
-                    <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        onClick={startPrediction}
-                        className="w-full py-3 rounded-lg bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 text-lg font-bold shadow-lg"
-                    >
-                        开始预测
-                    </motion.button>
                 </div>
             </section>
 
